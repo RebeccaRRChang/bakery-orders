@@ -175,6 +175,7 @@ async function cloudSave(orders){
   try{
     await fetch(SCRIPT_URL, {
       method:'POST',
+      headers:{'Content-Type':'text/plain'},
       body: JSON.stringify({action:'save', orders}),
     });
     if(el) el.textContent='✓ 已同步到雲端';
@@ -188,7 +189,7 @@ async function cloudSave(orders){
 
 async function cloudLoad(){
   try{
-    const res = await fetch(SCRIPT_URL+'?action=load');
+    const res = await fetch(SCRIPT_URL+'?action=load', {cache:'no-store'});
     const data = await res.json();
     if(data.ok && data.orders && data.orders.length > 0) return data.orders;
   } catch(e){ console.warn('雲端讀取失敗，使用本機資料', e); }
